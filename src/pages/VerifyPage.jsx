@@ -87,7 +87,10 @@ export default function VerifyPage() {
       }
     } catch (error) {
       console.error('Error chatting with Gemini:', error);
-      alert('Failed to connect to Gemini. Please check your API key and try again.');
+      console.error('Error response:', error.response);
+      console.error('Error message:', error.message);
+      const errorMsg = error.response?.data?.error?.message || error.message || 'Unknown error';
+      alert(`Failed to connect to Gemini:\n${errorMsg}`);
     }
   };
 
