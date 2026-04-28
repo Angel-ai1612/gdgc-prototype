@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   Upload, Image, Video, Camera, FileText, Link as LinkIcon
 } from 'lucide-react'
+import axios from 'axios' // Import axios for API calls
 
 const uploadTypes = [
   { id: 'image', label: 'Image', icon: Image },
@@ -59,6 +60,19 @@ export default function VerifyPage() {
       }
     }, 1200)
   }
+
+  const handleChatWithGemini = async () => {
+    try {
+      const response = await axios.post('https://api.gemini.example.com/chat', {
+        apiKey: 'GEMINI_API_KEY=AIzaSyDrQRGMsoz1ieWXPgyUG_eHEUZ7xYNU3y4',
+        message: 'Start a new chat session',
+      });
+      alert(`Chat session started: ${response.data.sessionId}`);
+    } catch (error) {
+      console.error('Error starting chat with Gemini:', error);
+      alert('Failed to start chat with Gemini. Please try again later.');
+    }
+  };
 
   return (
     <div>
@@ -122,6 +136,16 @@ export default function VerifyPage() {
           style={{ opacity: file ? 1 : 0.5 }}
         >
           Analyze Now
+        </button>
+      </div>
+
+      {/* Chat with Gemini Button */}
+      <div style={{ textAlign: 'center', marginTop: 16 }}>
+        <button
+          className="btn btn-secondary btn-lg"
+          onClick={handleChatWithGemini}
+        >
+          Chat with Gemini
         </button>
       </div>
 
