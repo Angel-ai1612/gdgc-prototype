@@ -63,14 +63,31 @@ export default function VerifyPage() {
 
   const handleChatWithGemini = async () => {
     try {
-      const response = await axios.post('https://api.gemini.example.com/chat', {
-        apiKey: 'GEMINI_API_KEY=AIzaSyDrQRGMsoz1ieWXPgyUG_eHEUZ7xYNU3y4',
-        message: 'Start a new chat session',
-      });
-      alert(`Chat session started: ${response.data.sessionId}`);
+      const apiKey = 'AIzaSyDrQRGMsoz1ieWXPgyUG_eHEUZ7xYNU3y4';
+      const response = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+        {
+          contents: [
+            {
+              parts: [
+                {
+                  text: 'Hello! I want to discuss media verification and authenticity checking. Can you help me understand how to verify if this media content is genuine?'
+                }
+              ]
+            }
+          ]
+        }
+      );
+      
+      if (response.data.candidates && response.data.candidates.length > 0) {
+        const reply = response.data.candidates[0].content.parts[0].text;
+        alert(`Gemini: ${reply}`);
+      } else {
+        alert('No response from Gemini');
+      }
     } catch (error) {
-      console.error('Error starting chat with Gemini:', error);
-      alert('Failed to start chat with Gemini. Please try again later.');
+      console.error('Error chatting with Gemini:', error);
+      alert('Failed to connect to Gemini. Please check your API key and try again.');
     }
   };
 
